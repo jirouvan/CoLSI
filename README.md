@@ -60,7 +60,7 @@ python train.py --output outputs/colsi_net_seed17 --resume
 
 默认配置见`configs/train.json`：seed17、90轮、物理batch24／有效batch48、BF16、TF32关闭、AdamW、主分支LR0.0006、骨干LR倍率0.1、单段cosine倍率1→0.1。监督为语义CE＋0.1边界BCE，采用原RGB/语义预处理和固定数据划分。发布训练器按整轮保存`last.pt`及优化器、scheduler和RNG，用完整val前景mIoU选择`best.pt`。恢复从最近完整轮开始，结果写入独立输出目录。
 
-最终分割权重来自完整90轮训练、val选中的epoch65。网盘同时提供官方MSCAN-B初始化权重供重新训练。标准下游使用现成冻结MoGe、ConvNeXt与MLP权重。
+网盘同时提供官方MSCAN-B初始化权重供重新训练。标准下游使用现成冻结MoGe、ConvNeXt与MLP权重。
 
 ## 评价
 
