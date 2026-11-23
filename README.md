@@ -1,21 +1,31 @@
 # CoLSI-Net
 
-CoLSI-Net用于合作式着陆表面的类别与完整可见区域分割。网络以SegNeXt-B的MSCAN-B和LightHam为基础，包含CFA（Cycle-consistent Feature Alignment，循环一致性特征对齐）与QSF（Quality–Semantic Fusion，质量—语义融合），通过CCSA（一致性引导的跨尺度支持注意力）连接。
+English | [Chinese](README-CN.md)
 
-完整链路为：**RGB、相机内参K、相机系重力g → CoLSI-Net类别与可见mask → 冻结MoGe-3 ViT-L几何描述与ConvNeXt-Tiny RGB-ROI特征 → 824维拼接 → MLP残差融合 → 表面倾角和着陆分级**。
+CoLSI-Net performs category-aware segmentation of the complete visible regions of cooperative landing surfaces. Built on the MSCAN-B backbone and LightHam decoder of SegNeXt-B, it combines **CFA (Cycle-consistent Feature Alignment)** and **QSF (Quality–Semantic Fusion)** through **CCSA (Consistency-guided Cross-scale Support Attention)**.
 
-## 发布目录
+The complete pipeline is: **RGB image, camera intrinsics K, and camera-frame gravity g → CoLSI-Net categories and visible masks → frozen MoGe-3 ViT-L geometry descriptors and ConvNeXt-Tiny RGB-ROI features → 824-dimensional concatenation → MLP residual fusion → surface inclination and landing status**.
+
+## Dataset download
+
+**Baidu Netdisk:** [Download CoLSI](https://pan.baidu.com/s/1Evur78E1ZnBxYYDhKmiagg)
+
+**Extraction code:** `2026`
+
+Place the downloaded `CoLSI-data` folder next to the code directory, as shown below.
+
+## Repository layout
 
 ```text
-CoLSI-code/                 # 上传GitHub的本目录
-  colsi/                   # 唯一最终网络、标准链、训练和评价
-  configs/                 # 训练协议及相机输入示例
-  third_party/             # 运行所需作者源码和原许可
+CoLSI-code/                 # This repository
+  colsi/                   # Final network, standard pipeline, training, and evaluation
+  configs/                 # Training protocol and camera-input example
+  third_party/             # Required upstream source code and original licenses
   train.py
   predict.py
   evaluate.py
-CoLSI-data/                 # 从网盘下载，放在相邻目录
-  CoLSI/                   # CoLSI-Sim、RealMarks、RealCalib与固定划分
+CoLSI-data/                 # Downloaded assets; place beside the code directory
+  CoLSI/                   # CoLSI-Sim, RealMarks, RealCalib, and fixed splits
   weights/
     colsi_net.pt
     convnext_tiny_roi.pt
@@ -25,44 +35,44 @@ CoLSI-data/                 # 从网盘下载，放在相邻目录
     manifest.json
 ```
 
-运行入口也接受`--data-root`和`--weights-dir`，可将数据和权重放在其他位置。代码目录约数MiB，权重与数据独立下载。
+Training and evaluation support `--data-root`; all three entry points support `--weights-dir` for custom asset locations. The code occupies a few MiB, with data and model weights stored separately.
 
-## 环境
+## Environment
 
-使用Python 3.12、CUDA版PyTorch和torchvision。实测环境：Python `3.12.13`、PyTorch `2.12.0.dev20260408+cu128`、torchvision `0.27.0.dev20260407+cu128`、CUDA12.8、RTX5090；关键依赖版本记录在`environment-tested.json`。先按[PyTorch官方安装页](https://pytorch.org/get-started/locally/)选择CUDA版torch/torchvision，再安装：
+Use Python 3.12 with CUDA-enabled PyTorch and torchvision. The tested environment uses Python `3.12.13`, PyTorch `2.12.0.dev20260408+cu128`, torchvision `0.27.0.dev20260407+cu128`, CUDA 12.8, and an RTX 5090. Key dependency versions are recorded in `environment-tested.json`. Install a CUDA-enabled torch/torchvision pair using the [official PyTorch installation guide](https://pytorch.org/get-started/locally/), then run:
 
 ```bash
 python -m pip install -r requirements.txt
 ```
 
-MoGe、FlexGEMM、utils3d-moge的关键源码随代码发布；推理入口自动加入包内路径。Windows使用triton-windows，Linux使用triton。FlexGEMM采用源码中的Triton后端。神经训练及推理使用CUDA，启动后将GPU名称、容量、模型与输入设备、显存写入输出目录。
+Required source code for MoGe, FlexGEMM, and utils3d-moge is included. Inference automatically adds the bundled paths. Windows uses triton-windows; Linux uses triton. FlexGEMM uses its Triton backend. Neural training and inference run on CUDA; GPU name, capacity, model/input devices, and memory usage are recorded in the output directory at startup.
 
-## 单图分割及完整链路
+## Single-image segmentation and the complete pipeline
 
 ```bash
-# 仅分割：导出语义图、逐对象类别与完整可见区域
+# Segmentation: export semantic labels, object categories, and complete visible masks
 python predict.py --input image.png --segmentation-only --output outputs/segmentation
 
-# 完整链：实际K和g_C写入camera.json
+# Complete pipeline: provide calibrated K and camera-frame g_C in camera.json
 python predict.py --input image.png --camera camera.json --output outputs/landing
 ```
 
-相机文件格式见`configs/camera.example.json`。K采用原图像素坐标，g_C为相机坐标系重力方向。发布的MoGe FOV适配器要求方形像素和位于`((W−1)/2,(H−1)/2)`的主点；MoGe采用level9、refine3、FP32。示例内参适配640×360，实际输入填写自身标定值。
+See `configs/camera.example.json` for the camera-file format. K uses native-image pixel coordinates, and g_C is the gravity direction in camera coordinates. The released MoGe FOV adapter requires square pixels and a principal point at `((W−1)/2,(H−1)/2)`. MoGe uses level 9, refine 3, and FP32. The example intrinsics correspond to a 640×360 image; supply calibrated values for your actual input.
 
-输出包括`semantic.png`、每个对象的二值可见mask、`prediction.json`及设备记录。按未舍入倾角分级：0°～5°安全着陆，>5°～15°谨慎着陆，>15°不可着陆；角度缺失时倾角和着陆分级留空。
+Outputs include `semantic.png`, a binary visible mask for each object, `prediction.json`, and device records. Landing status is assigned from the unrounded inclination: 0°–5° is safe, >5°–15° is cautious, and >15° is unsafe. Unavailable inclination and landing-status fields are serialized as null.
 
-## 训练
+## Training
 
 ```bash
 python train.py --output outputs/colsi_net_seed17
 python train.py --output outputs/colsi_net_seed17 --resume
 ```
 
-默认配置见`configs/train.json`：seed17、90轮、物理batch24／有效batch48、BF16、TF32关闭、AdamW、主分支LR0.0006、骨干LR倍率0.1、单段cosine倍率1→0.1。监督为语义CE＋0.1边界BCE，采用原RGB/语义预处理和固定数据划分。发布训练器按整轮保存`last.pt`及优化器、scheduler和RNG，用完整val前景mIoU选择`best.pt`。恢复从最近完整轮开始，结果写入独立输出目录。
+The default configuration in `configs/train.json` uses seed 17, 90 epochs, physical batch size 24 / effective batch size 48, BF16, TF32 disabled, AdamW, a main-branch learning rate of 0.0006, a backbone learning-rate multiplier of 0.1, and a single cosine schedule with multipliers from 1 to 0.1. Supervision combines semantic CE with 0.1-weighted boundary BCE, using the original RGB/semantic preprocessing and fixed data splits. At each completed epoch, the trainer saves `last.pt` together with optimizer, scheduler, and RNG states, and selects `best.pt` by foreground mIoU on the complete validation split. Resumption starts from the latest completed epoch; results are written to a separate output directory.
 
-网盘同时提供官方MSCAN-B初始化权重供重新训练。标准下游使用现成冻结MoGe、ConvNeXt与MLP权重。
+Official MSCAN-B initialization weights are provided in the cloud assets for retraining. The standard downstream pipeline uses the supplied frozen MoGe, ConvNeXt, and MLP weights.
 
-## 评价
+## Evaluation
 
 ```bash
 python evaluate.py --task segmentation --split val --output outputs/val_seg
@@ -70,12 +80,12 @@ python evaluate.py --task segmentation --split test --output outputs/test_seg
 python evaluate.py --task full-chain --split val --output outputs/val_chain
 ```
 
-评价遵循包内固定canonical顺序、分割B8、NMF临时种子61107、BF16与TF32关闭；图像经OpenCV letterbox到288×512，原图概率恢复沿用原实现。完整链先保存全部预测再读取GT评分；空间匹配IoU0.5，联合F1角误差阈值1°/2°/3°/5°/10°，漏检、错类和无效倾角在MAE90中计90°。RGB与MLP以逐图对象组FP32推理，运行配置随结果记录。单图演示采用B1；正式分割评价采用B8。
+Evaluation follows the bundled canonical order, segmentation batch size 8, temporary NMF seed 61107, BF16, and TF32 disabled. Images are letterboxed to 288×512 with OpenCV; native-resolution probability restoration follows the original implementation. Complete-pipeline predictions are saved before ground truth is read for scoring. Spatial matching uses IoU 0.5, and joint F1 uses angular-error thresholds of 1°/2°/3°/5°/10°. Missed objects, incorrect categories, and invalid inclination estimates receive a 90° penalty in MAE90. RGB and MLP inference uses FP32 on each frame's object group, with runtime settings recorded alongside results. Single-image demos use batch size 1; formal segmentation evaluation uses batch size 8.
 
-已有最终模型结果：完整val前景mIoU98.685922%、test98.719127%；既有标准链test联合F1@5°83.263347%、MAE90 3.385475°。CoLSI-Sim提供主要精确监督；RealMarks为弱标注，RealCalib提供未知棋盘条件诊断与支撑面参考。
+Existing final-model results are **98.685922% validation foreground mIoU** and **98.719127% test foreground mIoU**. The existing standard-pipeline test results are **83.263347% joint F1@5°** and **3.385475° MAE90**. CoLSI-Sim provides the primary precise supervision; RealMarks contains weak labels, and RealCalib provides unknown-checkerboard conditional diagnostics and support-surface references.
 
-## 来源、验证与许可
+## Provenance, validation, and licensing
 
-`SOURCE_PROVENANCE.json`列出最终核心函数的原源及抽取关系。源码抽取保留网络参数名；CPU检查完成888个最终权重张量严格加载、原/发布小夹具242张量相等及前向最大差0，ROI裁剪、48维几何描述、824维特征顺序和MLP亦逐项核对。代码发布整理采用现成权重，科研结果沿用对应原实验。
+`SOURCE_PROVENANCE.json` records the original sources and extraction mapping of the final core functions. Extraction preserves network parameter names. CPU validation includes strict loading of 888 final-checkpoint tensors, equality of 242 tensors in the original/released small fixture, and a maximum forward difference of 0. ROI cropping, the 48-dimensional geometry descriptor, the 824-dimensional feature order, and the MLP were also checked individually. The code release uses existing weights; reported research results retain their original experiment identities.
 
-第三方作者源码与许可见`THIRD_PARTY.md`和`third_party/*/LICENSE`。自研代码的发布许可由作者设置；第三方部分遵循各自原许可。
+Upstream sources and licenses are listed in `THIRD_PARTY.md` and `third_party/*/LICENSE`. The authors specify the release license for original project code; third-party components retain their respective licenses.
