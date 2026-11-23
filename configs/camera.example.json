@@ -1,0 +1,5 @@
+{
+  "K": [[608.0, 0.0, 319.5], [0.0, 608.0, 179.5], [0.0, 0.0, 1.0]],
+  "g_C": [0.0, 0.0, 1.0],
+  "note": "640x360 example only; replace K and g_C with the actual image calibration and camera-frame gravity"
+}

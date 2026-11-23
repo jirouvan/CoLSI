@@ -1,0 +1,209 @@
+{
+  "schema": "colsi_core_release_provenance_v1",
+  "source_root_role": "original local research source; all source files preserved",
+  "modules": [
+    {
+      "published": "colsi/_support.py",
+      "source": "landing_research/colsi_owned_seg_v1/model.py",
+      "source_sha256": "3229e3054292edd5a08ea867caec5589ef122a1aa05e967a7bb6c28e4125f960",
+      "symbols": [
+        "pixel_centers",
+        "normalize_coordinates",
+        "center_fallback",
+        "semantic_boundary",
+        "boundary_loss",
+        "combine_factorized_logits",
+        "DynamicSupport"
+      ],
+      "change": "selected final-runtime symbols and package-relative imports"
+    },
+    {
+      "published": "colsi/_alignment.py",
+      "source": "landing_research/colsi_owned_hypotheses_v1/cfa_model.py",
+      "source_sha256": "2b0ab184df61ef45daef231873aebcbafd251368ecf869e2d30007dbdfd49caa",
+      "symbols": [
+        "sampling_grid",
+        "warp",
+        "flow_predictor"
+      ],
+      "change": "selected final-runtime symbols and package-relative imports"
+    },
+    {
+      "published": "colsi/_fusion.py",
+      "source": "landing_research/colsi_owned_fusion8_v1/common.py",
+      "source_sha256": "35f782104392f86144bdca01f234133354e82f1bcfe8e5d1f3357a6f839acefe",
+      "symbols": [
+        "cycle_gates",
+        "Features",
+        "extract",
+        "resize",
+        "zero_head",
+        "boundary_head",
+        "Projection",
+        "Alignment",
+        "support_forward"
+      ],
+      "change": "selected final-runtime symbols and package-relative imports"
+    },
+    {
+      "published": "colsi/ccsa.py",
+      "source": "landing_research/colsi_owned_fusion8_v1/extensions.py",
+      "source_sha256": "8347eac6c31c243b8401e9e4c780bb6bb839500eb6416cd1a35a63affdfb7036",
+      "symbols": [
+        "candidate_cycle_prior",
+        "_fuse",
+        "FusionBlock"
+      ],
+      "change": "selected final-runtime symbols and package-relative imports"
+    },
+    {
+      "published": "colsi/_author.py",
+      "source": "landing_research/comparison_v1/segmentation_author_imports.py",
+      "source_sha256": "233b15e4dd10f79d50ea195ebba0cc6428346589a72b28b044380b3274d3572b",
+      "symbols": [
+        "package",
+        "load",
+        "temporary_modules"
+      ],
+      "change": "selected final-runtime symbols and package-relative imports"
+    },
+    {
+      "published": "colsi/_segnext.py",
+      "source": "landing_research/comparison_v1/segmentation_segnext.py",
+      "source_sha256": "c8e27c347e3d66031f81ba08aaf509b9dc3477b95af2273fd377109a5f4b96c5",
+      "symbols": [
+        "Registry",
+        "BaseModule",
+        "build_norm_layer",
+        "ConvModule",
+        "BaseDecodeHead",
+        "_init_constant",
+        "_init_normal",
+        "_init_trunc",
+        "author_modules",
+        "Model",
+        "construct",
+        "build",
+        "train_output",
+        "predict",
+        "parameter_groups"
+      ],
+      "change": "selected final-runtime symbols and package-relative imports"
+    },
+    {
+      "published": "colsi/model.py",
+      "source": "landing_research/colsi_owned_fusion8_v1/model.py",
+      "source_sha256": "43362b1740d2553dffdbae7a5936752796426d2aef817589eedba4155ed6f87f",
+      "symbols": [
+        "Model",
+        "final-only build/predict/train_output adapters"
+      ],
+      "change": "selected final-runtime symbols and package-relative imports"
+    },
+    {
+      "published": "colsi/segmentation.py",
+      "source": "landing_research/comparison_v1/segmentation_data_scoped_v3.py",
+      "source_sha256": "e3b77863cf8dd115e0398edc1bdea991d59049f302efbac68db9615b76175022",
+      "symbols": [
+        "mapping",
+        "prepare_rgb",
+        "prepare",
+        "restore",
+        "confusion",
+        "boundary_counts",
+        "metrics"
+      ],
+      "change": "selected final-runtime symbols and package-relative imports"
+    },
+    {
+      "published": "colsi/geometry_features.py",
+      "source": "landing_research/strong_reference_v1/moge_features.py",
+      "change": "exact source bytes",
+      "source_sha256": "ee18c86a0096e38690bba609da676972078b5a779d6f78363dc35a852d2ab6d8"
+    },
+    {
+      "published": "colsi/benchmark.py",
+      "source": "landing_research/benchmark.py",
+      "change": "exact source bytes",
+      "source_sha256": "ecb69cd9fa69039029d642429f877dbeaa16fa2475740831039995da0334a590"
+    },
+    {
+      "published": "colsi/crops.py",
+      "source": "landing_research/roi_classification.py",
+      "source_sha256": "96aa8b193bd5a459141c34b66e81bc80c459c576ca40e4c371d7de2f49f43f42",
+      "symbols": [
+        "_margin",
+        "square_bbox_for_mask",
+        "normalize_crop"
+      ],
+      "change": "selected final-runtime symbols and package-relative imports"
+    },
+    {
+      "published": "colsi/crops.py",
+      "source": "landing_research/roi_angle.py",
+      "symbols": [
+        "input_shape",
+        "crop_with_intrinsics"
+      ],
+      "change": "selected original crop/K/gravity transform",
+      "source_sha256": "431980e3566d8156cb15b2d9b7a6db7c5a9180ed295cf16ff7f8505313575e05"
+    },
+    {
+      "published": "colsi/task.py",
+      "source": "landing_research/comparison_v1/complete_task.py",
+      "source_sha256": "d63d7b44a22fc67bdb01e6c3480244119452d5ec931eb71d7a59faf0bc6197ab",
+      "symbols": [
+        "proposals",
+        "aggregate"
+      ],
+      "change": "selected final-runtime symbols and package-relative imports"
+    },
+    {
+      "published": "colsi/angle.py",
+      "source": "landing_research/strong_reference_v1/rgb_fusion.py",
+      "source_sha256": "64e718ca78e940cd05238d3fecd86eace996a8096371bc2d1e3af9602f99c664",
+      "symbols": [
+        "configure_fp32_runtime",
+        "extract_rgb_features",
+        "make_fusion_matrix",
+        "fit_normalization",
+        "FusionResidualHead",
+        "fit_fusion"
+      ],
+      "change": "selected final-runtime symbols and package-relative imports"
+    }
+  ],
+  "release_adapters": {
+    "colsi/runtime.py": "portable CUDA and precision setup; relative release asset paths",
+    "colsi/geometry.py": "MoGe-3 loader and G05 native-camera inference contract from comparison_v1/geometry_runtime.py",
+    "colsi/data.py": "canonical CoLSI public/supervision record selection; original letterbox function reuse",
+    "colsi/inference.py": "target-free final-model -> native MoGe descriptor -> frozen RGB -> fixed824 MLP integration",
+    "colsi/training.py": "same architecture/loss/AdamW/effective48/cosine; standalone epoch-boundary checkpoint and resume wrapper",
+    "colsi/evaluation.py": "canonical B8 inference, prediction-first save, original segmentation metrics and benchmark scoring",
+    "colsi/cli.py": "portable train, predict and evaluate argument parsing"
+  },
+  "third_party_modifications": [
+    {
+      "file": "third_party/MoGe/moge/model/modules/dinov2/utils/utils.py",
+      "change": "optional pretrained-state torch.load adds weights_only=True",
+      "original_source": "work/colsi_comparison_20261107/run_001/geometry/sources/MoGe/moge/model/modules/dinov2/utils/utils.py"
+    }
+  ],
+  "scope": {
+    "public_architecture": "CoLSI-Net",
+    "components": [
+      "CFA",
+      "QSF"
+    ],
+    "coupling": "CCSA",
+    "geometry": "MoGe-3 ViT-L",
+    "RGB": "ConvNeXt-Tiny ROI",
+    "angle_head": "824-input MLP residual",
+    "seed": 17
+  },
+  "release_adapter_changes": [
+    "Unique final architecture and MLP head only; unused alternative fusion/linear constructors omitted",
+    "Paths refer to the sibling CoLSI-data package or explicit CLI arguments",
+    "Portable trainer stores and resumes complete epochs; original numerical operator functions reused"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "model": "CoLSI-Net",
+  "training": {
+    "epochs": 90,
+    "seed": 17,
+    "batch_size": 24,
+    "effective_batch_size": 48,
+    "validation_batch_size": 8,
+    "size_hw": [288, 512],
+    "lr": 0.0006,
+    "optimizer": "AdamW",
+    "weight_decay": 0.01,
+    "gradient_clip_norm": 1.0,
+    "precision": "BF16",
+    "tf32": false,
+    "workers": 2,
+    "threads": 2,
+    "scheduler": "single_cosine_floor0.1",
+    "augmentation": "none"
+  }
+}
