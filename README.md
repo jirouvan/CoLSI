@@ -8,7 +8,7 @@ The complete pipeline is: **RGB image, camera intrinsics K, and camera-frame gra
 
 ## Dataset download
 
-**Baidu Netdisk:** [Download CoLSI](https://pan.baidu.com/s/1Evur78E1ZnBxYYDhKmiagg)
+**Baidu Netdisk:** [Download CoLSI](https://pan.baidu.com/s/1nFXsun_0H7JeOaLMqD3r9Q)
 
 **Extraction code:** `2026`
 
