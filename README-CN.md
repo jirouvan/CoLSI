@@ -8,7 +8,7 @@ CoLSI-Net用于合作式着陆表面的类别与完整可见区域分割。网�
 
 ## 数据集下载
 
-**百度网盘：**[下载CoLSI数据集](https://pan.baidu.com/s/1Evur78E1ZnBxYYDhKmiagg)
+**百度网盘：**[下载CoLSI数据集](https://pan.baidu.com/s/1nFXsun_0H7JeOaLMqD3r9Q)
 
 **提取码：**`2026`
 
